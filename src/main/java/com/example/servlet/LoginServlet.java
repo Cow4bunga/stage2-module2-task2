@@ -13,22 +13,21 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        if (req.getSession().getAttribute("user") == null)
-            res.sendRedirect("/login.jsp");
-        else
-            res.sendRedirect("/user/hello.jsp");
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        if (Users.getInstance().getUsers().contains("login")
-                && !req.getParameter("password").isEmpty()) {
-            req.getSession().setAttribute("user", "user");
-            res.sendRedirect(" /user/hello.jsp");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (req.getSession().getAttribute("user") == null) {
+            resp.sendRedirect("/login.jsp");
         } else {
-            req.getRequestDispatcher("/login.jsp.*/").forward(req, res);
+            resp.sendRedirect("/user/hello.jsp");
         }
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (Users.getInstance().getUsers().contains("login") && !req.getParameter("password").isEmpty()) {
+            req.getSession().setAttribute("user", "user");
+            resp.sendRedirect("/user/hello.jsp");
+        } else {
+            req.getRequestDispatcher("/login.jsp").forward(req, resp);
+        }
+    }
 }
